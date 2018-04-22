@@ -81,3 +81,13 @@ func TestDefault(t *testing.T) {
 	w := makeReq(s)
 	assert.Equal(t, w.Code, 403)
 }
+
+func TestGc(t *testing.T) {
+	s := NewLimiter(1, 2, time.Millisecond*100)
+	k := "test key"
+	s.incr(k)
+	time.Sleep(time.Second)
+	time.Sleep(time.Second)
+	_, ok := s.s.Load(k)
+	assert.False(t, ok)
+}
