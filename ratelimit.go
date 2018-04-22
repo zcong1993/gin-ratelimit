@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 // Config is gin-ratelimit config
@@ -34,7 +35,7 @@ func Default() gin.HandlerFunc {
 
 // New return a middleware with config
 func New(config Config) gin.HandlerFunc {
-	rateLimiter := NewLimiter(config.Duration, config.RateLimit)
+	rateLimiter := NewLimiter(config.Duration, config.RateLimit, time.Second*10)
 	if config.LimitFunc == nil {
 		config.LimitFunc = func(c *gin.Context, ip string) {
 			errorMsg := fmt.Sprintf("rate limit, requests should less than %d every %d seconds. ", config.RateLimit, config.Duration)
