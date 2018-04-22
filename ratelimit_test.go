@@ -69,3 +69,15 @@ func TestCustomLimitFunc(t *testing.T) {
 	assert.Equal(t, w.Code, 200)
 	assert.Equal(t, w.Body.String(), testResp)
 }
+
+func TestDefault(t *testing.T) {
+	mw := Default()
+	s := newServer(mw)
+	for i := int64(0); i < defaultConfig.RateLimit; i++ {
+		w := makeReq(s)
+		assert.Equal(t, w.Code, 200)
+		assert.Equal(t, w.Body.String(), testResp)
+	}
+	w := makeReq(s)
+	assert.Equal(t, w.Code, 403)
+}
