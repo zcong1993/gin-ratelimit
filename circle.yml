@@ -13,7 +13,7 @@ jobs:
           name: get deps
           command: make install
       - run:
-          name: build
+          name: test
           command: make test.cov
       - run:
           name: codecov
