@@ -2,6 +2,7 @@ package ratelimit
 
 import (
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -51,7 +52,7 @@ func (s *Ratelimiter) incr(k string) {
 	v, ok := s.s.LoadOrStore(k, &Item{num: 1, expireIn: time.Now().Unix() + s.duration})
 	if ok {
 		vv, _ := v.(*Item)
-		vv.num++
+		atomic.AddInt64(&vv.num, 1)
 	}
 }
 
@@ -69,7 +70,7 @@ func (s *Ratelimiter) ShouldLimit(k string) bool {
 		s.incr(k)
 		return false
 	}
-	if iv.num > s.rateLimit {
+	if atomic.LoadInt64(&iv.num) > s.rateLimit {
 		return true
 	}
 	return false
