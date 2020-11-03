@@ -2,6 +2,8 @@
 
 > ratelimit middleware for gin
 
+**IMPORTANT:** DO NOT USE IT IN PRODUCTION!!! USE [https://github.com/ulule/limiter](https://github.com/ulule/limiter)
+
 ## Install
 
 ```sh
